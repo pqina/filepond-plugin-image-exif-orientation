@@ -1,6 +1,6 @@
 {
     "name": "filepond-plugin-image-exif-orientation",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Image Exif Orientation Plugin for FilePond",
     "homepage": "https://pqina.nl/filepond",
     "repository": "pqina/filepond-plugin-image-exif-orientation",
@@ -11,5 +11,8 @@
     "author": {
         "name": "PQINA",
         "url": "https://pqina.nl"
+    },
+    "peerDependencies": {
+        "filepond": "^1.8.0"
     }
 }

@@ -1,5 +1,5 @@
 /*
- * FilePondPluginImageExifOrientation 1.0.1
+ * FilePondPluginImageExifOrientation 1.0.2
  * Licensed under MIT, https://opensource.org/licenses/MIT
  * Please visit https://pqina.nl/filepond for details.
  */
@@ -103,7 +103,8 @@
   var plugin$1 = function(_) {
     var addFilter = _.addFilter,
       utils = _.utils;
-    var Type = utils.Type;
+    var Type = utils.Type,
+      isFile = utils.isFile;
 
     // subscribe to file load and append required info
 
@@ -114,7 +115,11 @@
         var file = item.file;
 
         // if this is not a jpeg image we are not interested
-        if (!isJPEG(file) || !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION')) {
+        if (
+          !isFile(file) ||
+          !isJPEG(file) ||
+          !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION')
+        ) {
           // continue with the unaltered dataset
           return resolve(item);
         }
