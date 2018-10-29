@@ -1,8 +1,10 @@
 /*
- * FilePondPluginImageExifOrientation 1.0.2
+ * FilePondPluginImageExifOrientation 1.0.3
  * Licensed under MIT, https://opensource.org/licenses/MIT
  * Please visit https://pqina.nl/filepond for details.
  */
+
+/* eslint-disable */
 // test if file is of type image
 const isJPEG = file => /^image\/jpeg/.test(file.type);
 
@@ -40,7 +42,7 @@ const getImageOrientation = file =>
         const marker = getUint16(view, offset);
         offset += 2;
 
-        // There's or APP1 Marker
+        // There's our APP1 Marker
         if (marker === Marker.APP1) {
           if (getUint32(view, (offset += 2)) !== Marker.EXIF) {
             // no EXIF info defined
@@ -124,8 +126,10 @@ var plugin$1 = _ => {
   };
 };
 
-if (typeof navigator !== 'undefined' && document) {
-  // plugin has loaded
+const isBrowser =
+  typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+if (isBrowser && document) {
   document.dispatchEvent(
     new CustomEvent('FilePond:pluginloaded', { detail: plugin$1 })
   );
