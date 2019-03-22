@@ -1,10 +1,11 @@
-/*
- * FilePondPluginImageExifOrientation 1.0.4
- * Licensed under MIT, https://opensource.org/licenses/MIT
- * Please visit https://pqina.nl/filepond for details.
+/*!
+ * FilePondPluginImageExifOrientation 1.0.5
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://pqina.nl/filepond/ for details.
  */
 
 /* eslint-disable */
+
 // test if file is of type image
 const isJPEG = file => /^image\/jpeg/.test(file.type);
 
@@ -84,8 +85,7 @@ const getImageOrientation = file =>
 /**
  * Read Image Orientation Plugin
  */
-var plugin$1 = _ => {
-  const { addFilter, utils } = _;
+const plugin = ({ addFilter, utils }) => {
   const { Type, isFile } = utils;
 
   // subscribe to file load and append required info
@@ -126,13 +126,13 @@ var plugin$1 = _ => {
   };
 };
 
+// fire pluginloaded event if running in browser, this allows registering the plugin when using async script tags
 const isBrowser =
   typeof window !== 'undefined' && typeof window.document !== 'undefined';
-
 if (isBrowser) {
   document.dispatchEvent(
-    new CustomEvent('FilePond:pluginloaded', { detail: plugin$1 })
+    new CustomEvent('FilePond:pluginloaded', { detail: plugin })
   );
 }
 
-export default plugin$1;
+export default plugin;
