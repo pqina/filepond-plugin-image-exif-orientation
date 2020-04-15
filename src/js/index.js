@@ -1,5 +1,6 @@
 import { isJPEG } from './utils/isJPEG';
 import { getImageOrientation } from './utils/getImageOrientation';
+import { shouldCorrectImageExifOrientation } from './utils/shouldCorrectImageExifOrientation';
 
 /**
  * Read Image Orientation Plugin
@@ -19,7 +20,8 @@ const plugin = ({ addFilter, utils }) => {
                 if (
                     !isFile(file) ||
                     !isJPEG(file) ||
-                    !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION')
+                    !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION') ||
+                    !shouldCorrectImageExifOrientation()
                 ) {
                     // continue with the unaltered dataset
                     return resolve(item);
@@ -27,10 +29,7 @@ const plugin = ({ addFilter, utils }) => {
 
                 // get orientation from exif data
                 getImageOrientation(file).then(orientation => {
-                    item.setMetadata('exif', {
-                        orientation
-                    });
-
+                    item.setMetadata('exif', { orientation });
                     resolve(item);
                 });
             })

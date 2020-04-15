@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginImageExifOrientation 1.0.6
+ * FilePondPluginImageExifOrientation 1.0.7
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -102,6 +102,22 @@
     });
   };
 
+  // 2x1 pixel image 90CW rotated with orientation header
+  var testSrc =
+    'data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QA6RXhpZgAATU0AKgAAAAgAAwESAAMAAAABAAYAAAEoAAMAAAABAAIAAAITAAMAAAABAAEAAAAAAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wAALCAABAAIBASIA/8QAJgABAAAAAAAAAAAAAAAAAAAAAxABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAAPwBH/9k=';
+
+  // should correct orientation if is presented in landscape, in which case the browser doesn't autocorrect
+  var shouldCorrect = undefined;
+  var testImage = new Image();
+  testImage.onload = function() {
+    return (shouldCorrect = testImage.naturalWidth > testImage.naturalHeight);
+  };
+  testImage.src = testSrc;
+
+  var shouldCorrectImageExifOrientation = function shouldCorrectImageExifOrientation() {
+    return shouldCorrect;
+  };
+
   /**
    * Read Image Orientation Plugin
    */
@@ -122,7 +138,8 @@
         if (
           !isFile(file) ||
           !isJPEG(file) ||
-          !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION')
+          !query('GET_ALLOW_IMAGE_EXIF_ORIENTATION') ||
+          !shouldCorrectImageExifOrientation()
         ) {
           // continue with the unaltered dataset
           return resolve(item);
@@ -130,10 +147,7 @@
 
         // get orientation from exif data
         getImageOrientation(file).then(function(orientation) {
-          item.setMetadata('exif', {
-            orientation: orientation
-          });
-
+          item.setMetadata('exif', { orientation: orientation });
           resolve(item);
         });
       });
