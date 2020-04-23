@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginImageExifOrientation 1.0.7
+ * FilePondPluginImageExifOrientation 1.0.8
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -82,13 +82,17 @@ const getImageOrientation = file =>
     reader.readAsArrayBuffer(file.slice(0, 64 * 1024));
   });
 
+const IS_BROWSER = (() =>
+  typeof window !== 'undefined' && typeof window.document !== 'undefined')();
+const isBrowser = () => IS_BROWSER;
+
 // 2x1 pixel image 90CW rotated with orientation header
 const testSrc =
   'data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QA6RXhpZgAATU0AKgAAAAgAAwESAAMAAAABAAYAAAEoAAMAAAABAAIAAAITAAMAAAABAAEAAAAAAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wAALCAABAAIBASIA/8QAJgABAAAAAAAAAAAAAAAAAAAAAxABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAAPwBH/9k=';
 
 // should correct orientation if is presented in landscape, in which case the browser doesn't autocorrect
 let shouldCorrect = undefined;
-const testImage = new Image();
+const testImage = isBrowser() ? new Image() : {};
 testImage.onload = () =>
   (shouldCorrect = testImage.naturalWidth > testImage.naturalHeight);
 testImage.src = testSrc;
@@ -138,9 +142,9 @@ const plugin = ({ addFilter, utils }) => {
 };
 
 // fire pluginloaded event if running in browser, this allows registering the plugin when using async script tags
-const isBrowser =
+const isBrowser$1 =
   typeof window !== 'undefined' && typeof window.document !== 'undefined';
-if (isBrowser) {
+if (isBrowser$1) {
   document.dispatchEvent(
     new CustomEvent('FilePond:pluginloaded', { detail: plugin })
   );

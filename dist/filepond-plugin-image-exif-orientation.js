@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginImageExifOrientation 1.0.7
+ * FilePondPluginImageExifOrientation 1.0.8
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
@@ -102,13 +102,22 @@
     });
   };
 
+  var IS_BROWSER = (function() {
+    return (
+      typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    );
+  })();
+  var isBrowser = function isBrowser() {
+    return IS_BROWSER;
+  };
+
   // 2x1 pixel image 90CW rotated with orientation header
   var testSrc =
     'data:image/jpg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QA6RXhpZgAATU0AKgAAAAgAAwESAAMAAAABAAYAAAEoAAMAAAABAAIAAAITAAMAAAABAAEAAAAAAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wAALCAABAAIBASIA/8QAJgABAAAAAAAAAAAAAAAAAAAAAxABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAAPwBH/9k=';
 
   // should correct orientation if is presented in landscape, in which case the browser doesn't autocorrect
   var shouldCorrect = undefined;
-  var testImage = new Image();
+  var testImage = isBrowser() ? new Image() : {};
   testImage.onload = function() {
     return (shouldCorrect = testImage.naturalWidth > testImage.naturalHeight);
   };
@@ -163,9 +172,9 @@
   };
 
   // fire pluginloaded event if running in browser, this allows registering the plugin when using async script tags
-  var isBrowser =
+  var isBrowser$1 =
     typeof window !== 'undefined' && typeof window.document !== 'undefined';
-  if (isBrowser) {
+  if (isBrowser$1) {
     document.dispatchEvent(
       new CustomEvent('FilePond:pluginloaded', { detail: plugin })
     );
