@@ -1,5 +1,5 @@
 /*!
- * FilePondPluginImageExifOrientation 1.0.8
+ * FilePondPluginImageExifOrientation 1.0.9
  * Licensed under MIT, https://opensource.org/licenses/MIT/
  * Please visit https://pqina.nl/filepond/ for details.
  */
