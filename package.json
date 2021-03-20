@@ -1,6 +1,6 @@
 {
   "name": "filepond-plugin-image-exif-orientation",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Image Exif Orientation Plugin for FilePond",
   "license": "MIT",
   "author": {
